@@ -1,0 +1,63 @@
+#include<stdio.h>
+#include<pthread.h>
+#include<semaphore.h>
+#include<unistd.h>
+#define N 5
+#define MAX_EATS 3  
+#define right(ph)    (ph % N)   
+#define left(ph)     ((ph + 1) % N) 
+sem_t chopstick[N];
+pthread_t T[N];
+void* philo(void*);
+void think(int);
+void eat(int);
+void main() 
+{
+    int i, var[N];
+    for (i = 0; i < N; i++) 
+    {
+        sem_init(&chopstick[i], 0, 1); 
+    }
+    for (i = 0; i < N; i++) 
+    {
+        var[i] = i;
+        pthread_create(&T[i], NULL, (void*)philo, (void*)&var[i]);
+    }
+    for (i = 0; i < N; i++) 
+    {
+        pthread_join(T[i], NULL);
+    }
+}
+void* philo(void* n) 
+{
+    int ph = *(int*)n;
+    int eat_count = 0;
+    while (eat_count < MAX_EATS) {  
+        think(ph);
+        printf("\nPhilosopher %d is HUNGRY & wants to EAT", ph);
+        printf("\nPhilosopher %d tries to pick left chopstick", ph);
+        sem_wait(&chopstick[left(ph)]);
+        printf("\nPhilosopher %d has successfully picked up the left chopstick -> %d", ph, left(ph));
+        sem_wait(&chopstick[right(ph)]);
+        printf("\nPhilosopher %d has successfully picked up the right chopstick -> %d", ph, right(ph));
+        eat(ph);
+        eat_count++;
+        printf("\nPhilosopher %d has finished EATING", ph);
+        sem_post(&chopstick[right(ph)]);
+        printf("\nPhilosopher %d puts down the right chopstick -> %d", ph, right(ph));
+        sem_post(&chopstick[left(ph)]);
+        printf("\nPhilosopher %d puts down the left chopstick -> %d", ph, left(ph));
+    }
+    return NULL;
+}
+void eat(int ph) 
+{
+    printf("\n\tPhilosopher %d begins to EAT using Chopsticks : %d(LEFT) & %d(RIGHT)", ph, left(ph), right(ph));
+    sleep(1);
+}
+void think(int ph) 
+{
+    printf("\nPhilosopher %d is THINKING", ph);
+    sleep(1); 
+}
+

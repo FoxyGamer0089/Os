@@ -1,0 +1,45 @@
+#include<stdio.h>
+#define max 25
+int i,j,k=0,nb,nf,temp=0,high=0,flag=0;
+void firstfit(int b[],int f[])
+{
+for(i=1;i<=nf;i++)
+{
+for(j=0;j<=nb;j++)
+{
+temp=b[j]-f[j];
+if(temp>=0)
+{
+k=j;
+printf("\nFILE SIZE %d IS PUT IN %d PARTITION ",f[i],b[k]);
+b[k]=temp;
+flag=1;
+break;
+}}
+if(flag==0)
+printf("\nFile  size %d must wait ",f[i]);
+flag=0;
+}}
+int main()
+{
+int b[max],f[max];
+printf("\n MEMORY MANAGEMENT SCHEME-FIRST FIT ");
+printf("\nENTER THE NUMBER OF BLOCKS : ");
+scanf("%d",&nb);
+printf("ENTER THE NUMBER OF FILES : ");
+scanf(" %d",&nf);
+printf("\n ENTER THE SIZE OF BLOCKS :\n");
+for(i=1;i<=nb;i++)
+{
+printf("block %d :",i);
+scanf("%d",&b[i]);
+}
+printf("\nENTER THE SIZE OF FILE :\n");
+for(i=1;i<=nf;i++)
+{
+printf("FILE %d :", i);
+scanf("%d",&f[i]);
+}
+firstfit(b,f);
+return 0;
+}

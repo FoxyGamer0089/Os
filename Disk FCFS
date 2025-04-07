@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int RQ[100], n, head, TotalHeadMovement = 0, i;
+    printf("Enter number of requests: ");
+    scanf("%d", &n);
+    printf("Enter request sequence: ");
+    for(i = 0; i < n; i++)
+        scanf("%d", &RQ[i]);
+    printf("Enter initial head position: ");
+    scanf("%d", &head);
+
+    printf("Disk head movement order:\n");
+    printf("%d -> ", head);
+    for(i = 0; i < n; i++) {
+        TotalHeadMovement += abs(RQ[i] - head);
+        head = RQ[i];
+        if(i != n - 1)
+            printf("%d -> ", head);
+        else
+            printf("%d\n", head);
+    }
+
+    printf("Total head movement: %d\n", TotalHeadMovement);
+    return 0;
+}
